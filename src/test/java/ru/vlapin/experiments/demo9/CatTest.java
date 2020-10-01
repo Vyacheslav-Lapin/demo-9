@@ -7,9 +7,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -19,23 +20,20 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @WithMockUser(authorities = "ADMIN")
 @SuppressWarnings("ClassCanBeRecord")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class CatTest {
 
-  private final MockMvc mockMvc;
-
-  public CatTest(MockMvc mockMvc) {
-    this.mockMvc = mockMvc;
-  }
+  MockMvc mockMvc;
 
   @Test
-//  @SneakyThrows
+  //  @SneakyThrows
   @DisplayName("Cats is accessible via REST")
   void catsIsAccessibleViaRESTTest() throws Exception {
     mockMvc.perform(get("/cats"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(HAL_JSON_VALUE))
-      .andExpect(mvcResult -> assertEquals(3,
-          parse(mvcResult.getResponse().getContentAsString())
-              .<Integer>read("$.page.totalElements").intValue()));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(HAL_JSON_VALUE))
+        .andExpect(mvcResult -> assertEquals(3,
+            parse(mvcResult.getResponse().getContentAsString())
+                .<Integer>read("$.page.totalElements").intValue()));
   }
 }

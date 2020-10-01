@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.assertj.core.api.Condition;
@@ -18,15 +19,11 @@ import ru.vlapin.experiments.demo9.model.jsonplaceholder.Post;
 import ru.vlapin.experiments.demo9.service.jsonplaceholder.PostService;
 
 @SpringBootTest
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class PostControllerTest {
 
-  private final long id = 57L;
-  private final PostService postService;
-
-  @Autowired
-  public PostControllerTest(PostService postService) {
-    this.postService = postService;
-  }
+  long id = 57L;
+  PostService postService;
 
   @ParameterizedTest
   @ValueSource(strings = { "Hello", "World" })
