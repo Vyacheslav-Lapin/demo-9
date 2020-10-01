@@ -7,11 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -20,15 +18,19 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(authorities = "ADMIN")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@SuppressWarnings("ClassCanBeRecord")
 class CatTest {
 
-  MockMvc mockMvc;
+  private final MockMvc mockMvc;
+
+  public CatTest(MockMvc mockMvc) {
+    this.mockMvc = mockMvc;
+  }
 
   @Test
-  @SneakyThrows
+//  @SneakyThrows
   @DisplayName("Cats is accessible via REST")
-  void catsIsAccessibleViaRESTTest() {
+  void catsIsAccessibleViaRESTTest() throws Exception {
     mockMvc.perform(get("/cats"))
       .andExpect(status().isOk())
       .andExpect(content().contentType(HAL_JSON_VALUE))
